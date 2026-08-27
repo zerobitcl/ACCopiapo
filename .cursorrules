@@ -1,0 +1,22 @@
+# ACCopiapó — Rank & Rent HVAC (Copiapó / Atacama)
+
+## Prohibido (velocidad crítica <1s)
+- Frameworks JS pesados: React, Vue, Angular, Next, Nuxt, SvelteKit, jQuery, Alpine, etc.
+- Bundlers obligatorios, CDN de UI kits, animaciones con librerías (GSAP, Framer, Lottie CDN).
+- Fuentes web remotas no críticas, imágenes sin `width`/`height` o sin lazy fuera del LCP.
+- Scripts de terceros en el critical path (analytics bloqueantes, chat widgets pesados).
+
+## Obligatorio
+- HTML5 semántico nativo + CSS3 (`:root` variables) + Vanilla JS (`defer`).
+- Un solo `<h1>` hyper-local por página. Jerarquía H1 → H2 → H3 sin saltos.
+- Bloques de contenido en `<section>`; ítems de servicio/zona/FAQ en `<article>`.
+- Schema.org JSON-LD: al menos `HVACBusiness` + `areaServed` locales + FAQ cuando existan.
+- White-label vía placeholders `BUSINESS_*` y variables CSS `--primary-color`, `--secondary-color`, `--text-color`.
+- CTAs tap-to-call: `<a href="tel:...">`. Inputs móviles: `type="tel"`, `inputmode="tel"`.
+- Respetar `prefers-reduced-motion`. Animaciones solo CSS/transform/opacity o JS ligero.
+
+## SEO local
+- Ciudad principal en H1 (no listar todas las comunas en el H1).
+- Cobertura secundaria: Tierra Amarilla, Caldera, Bahía Inglesa, Vallenar, Chañaral, Diego de Almagro, etc.
+- Hooks HTML `CLONING_HOOK_LOCAL_LINKS` para landings satélite futuras.
+- Core Web Vitals: LCP <2.5s (ideal TTFB+render <1s), CLS bajo, INP bajo; DOM mínimo.

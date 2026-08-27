@@ -1,12 +1,12 @@
 const BUSINESS = {
-  name: "BUSINESS_NAME",
-  phone: "+56 9 XXXX XXXX",
-  whatsapp: "569XXXXXXXX",
-  address: "BUSINESS_ADDRESS",
-  email: "BUSINESS_EMAIL"
+  name: "Aire Copiapó",
+  phone: "+56 9 9428 4048",
+  whatsapp: "56994284048",
+  address: "Copiapó, Región de Atacama, Chile",
+  email: "contacto@airecopiapo.cl"
 };
 
-const DEFAULT_MESSAGE = "Hola, necesito cotizar aire acondicionado y climatización en Copiapó.";
+const DEFAULT_MESSAGE = "Hola, necesito cotizar aire acondicionado en Copiapó / Atacama.";
 
 const onlyDialable = (value) => value.replace(/[^\d+]/g, "");
 

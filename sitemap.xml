@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.aireacondicionadocopiapo.cl/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- CLONING_HOOK_SITEMAP: añadir URLs satélite al publicar landings
+  <url><loc>https://www.aireacondicionadocopiapo.cl/tierra-amarilla/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.aireacondicionadocopiapo.cl/caldera/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.aireacondicionadocopiapo.cl/bahia-inglesa/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.aireacondicionadocopiapo.cl/vallenar/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.aireacondicionadocopiapo.cl/chanaral/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.aireacondicionadocopiapo.cl/diego-de-almagro/</loc><priority>0.8</priority></url>
+  -->
+</urlset>

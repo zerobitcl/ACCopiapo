@@ -74,29 +74,45 @@ button {
 }
 
 .brand {
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
   font-weight: 900;
 }
 
-.brand__logo {
-  display: grid;
-  flex: 0 0 52px;
-  width: 52px;
-  height: 40px;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+.brand__mark {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
   border-radius: 14px;
-  color: var(--dark-color);
-  background: #fff;
-  font-size: 0.72rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
 }
 
-.brand__text {
+.brand__lockup {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  line-height: 1.05;
+}
+
+.brand__name {
   overflow: hidden;
-  max-width: 145px;
+  max-width: 180px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+
+.brand__tag {
+  overflow: hidden;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .main-nav {
@@ -284,13 +300,37 @@ h1 {
   letter-spacing: -0.075em;
 }
 
-.hero h2 {
+.hero-sub {
   max-width: 720px;
   margin-bottom: 16px;
   color: rgba(255, 255, 255, 0.9);
   font-size: clamp(1.22rem, 5vw, 2rem);
   line-height: 1.12;
   letter-spacing: -0.045em;
+  font-weight: 800;
+}
+
+.section-lead {
+  max-width: 760px;
+  margin-bottom: 28px;
+  color: var(--muted-color);
+  font-size: 1.05rem;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 100;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: var(--dark-color);
+  background: var(--secondary-color);
+  font-weight: 900;
+}
+
+.skip-link:focus {
+  top: 12px;
 }
 
 h2 {
@@ -511,27 +551,51 @@ small {
     var(--surface-color);
 }
 
-.coverage-list {
+.coverage-grid {
   display: grid;
-  gap: 10px;
-  margin: 24px 0 0;
-  padding: 0;
-  list-style: none;
+  gap: 14px;
+  margin-top: 24px;
 }
 
-.coverage-list li {
-  padding: 16px 18px;
+.coverage-card,
+.faq-item {
+  padding: 22px;
   border: 1px solid var(--line-color);
-  border-radius: 18px;
+  border-radius: var(--radius);
   background: var(--surface-color);
-  font-weight: 900;
-  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+  box-shadow: 0 14px 40px rgba(8, 24, 39, 0.06);
+  transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
-.coverage-list li:hover {
+.coverage-card:hover,
+.faq-item:hover {
   transform: translateY(-4px);
   border-color: color-mix(in srgb, var(--primary-color) 45%, var(--line-color));
-  background: color-mix(in srgb, var(--primary-color) 6%, var(--surface-color));
+}
+
+.coverage-card p,
+.faq-item p {
+  margin-bottom: 12px;
+  color: var(--muted-color);
+}
+
+.coverage-card__link {
+  display: inline-block;
+  color: var(--primary-color);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.faq-list {
+  display: grid;
+  gap: 14px;
+}
+
+.footer-seo-note {
+  margin-top: 18px;
+  color: #9fb2c3;
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
 .stat-row {
@@ -721,7 +785,7 @@ small {
     font-size: 0.78rem;
   }
 
-  .brand__text {
+  .brand__tag {
     display: none;
   }
 }
@@ -735,7 +799,8 @@ small {
   .tag-grid,
   .service-grid,
   .authority-grid,
-  .coverage-list {
+  .coverage-grid,
+  .faq-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -757,6 +822,10 @@ small {
 
   .service-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .coverage-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .authority {
