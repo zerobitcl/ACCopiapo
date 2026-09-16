@@ -34,7 +34,8 @@ a {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -450,7 +451,8 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
   min-height: 52px;
   padding: 0 14px;
@@ -460,10 +462,36 @@ select {
   background: #fff;
 }
 
+textarea {
+  padding-block: 13px;
+  resize: vertical;
+}
+
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   border-color: var(--primary-color);
   outline: 3px solid rgba(10, 102, 255, 0.16);
+}
+
+.form-intro {
+  margin: -8px 0 18px;
+  color: var(--muted-color);
+  font-size: 0.92rem;
+}
+
+.form-trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+label small {
+  display: inline;
+  margin: 0;
+  font-weight: 500;
 }
 
 small {
@@ -670,11 +698,89 @@ small {
   box-shadow: none;
 }
 
+.footer-contact {
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius);
+  color: #dce7ef;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.footer-contact .btn {
+  width: fit-content;
+}
+
 .copyright {
   width: min(100%, var(--container-width));
   margin: 28px auto 0;
   color: #9fb2c3;
   font-size: 0.92rem;
+}
+
+/* Landings locales: composición editorial ligera y reutilizable sin añadir JS */
+.local-hero {
+  padding: 132px 16px 72px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(10, 102, 255, 0.34), transparent 30%),
+    var(--dark-color);
+}
+
+.local-hero__inner,
+.breadcrumb {
+  width: min(100%, var(--container-width));
+  margin-inline: auto;
+}
+
+.local-hero h1 {
+  max-width: 900px;
+}
+
+.local-hero p:not(.eyebrow) {
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.08rem;
+}
+
+.breadcrumb {
+  padding-top: 22px;
+  color: var(--muted-color);
+  font-size: 0.88rem;
+}
+
+.breadcrumb a,
+.text-link {
+  color: var(--primary-color);
+  font-weight: 850;
+}
+
+.local-layout {
+  display: grid;
+  gap: 28px;
+}
+
+.local-panel {
+  padding: 24px;
+  border: 1px solid var(--line-color);
+  border-radius: var(--radius);
+  background: var(--surface-color);
+}
+
+.local-list {
+  display: grid;
+  gap: 12px;
+  padding-left: 20px;
+}
+
+.local-cta {
+  padding: 30px;
+  border-radius: var(--radius);
+  color: #fff;
+  background: var(--dark-color);
+}
+
+.local-cta p {
+  color: #c5d2dd;
 }
 
 .whatsapp-float {
@@ -785,6 +891,10 @@ small {
     font-size: 0.78rem;
   }
 
+  .main-nav a:not(:last-child) {
+    display: none;
+  }
+
   .brand__tag {
     display: none;
   }
@@ -835,6 +945,11 @@ small {
 
   .footer-grid {
     grid-template-columns: 0.9fr 1.1fr;
+    align-items: start;
+  }
+
+  .local-layout {
+    grid-template-columns: 1.2fr 0.8fr;
     align-items: start;
   }
 
