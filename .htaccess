@@ -1,0 +1,7 @@
+# Bloquear acceso HTTP a credenciales SMTP
+<Files "mail.config.php">
+  Require all denied
+</Files>
+<Files "mail.config.sample.php">
+  Require all denied
+</Files>
