@@ -5,3 +5,49 @@
 <Files "mail.config.sample.php">
   Require all denied
 </Files>
+
+# Canonico: https://www.aireacondicionadocopiapo.cl/ (evita duplicar HTTP / apex / index.html)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTP_HOST} ^aireacondicionadocopiapo\.cl$ [NC]
+  RewriteRule ^ https://www.aireacondicionadocopiapo.cl%{REQUEST_URI} [L,R=301]
+
+  # Hostinger termina TLS en el proxy: no redirigir si X-Forwarded-Proto ya es https
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteRule ^ https://www.aireacondicionadocopiapo.cl%{REQUEST_URI} [L,R=301]
+
+  RewriteCond %{THE_REQUEST} \s/+(.*?)index\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml application/xml text/xml
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript application/javascript application/json image/svg+xml application/xml text/xml
+</IfModule>
+
+# 30 dias, no immutable: CSS/JS no llevan hash de contenido
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 30 days"
+  ExpiresByType text/javascript "access plus 30 days"
+  ExpiresByType application/javascript "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/x-icon "access plus 30 days"
+  ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "\.(css|js|svg|png|jpe?g|webp|ico)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>

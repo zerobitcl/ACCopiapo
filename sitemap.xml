@@ -2,23 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.aireacondicionadocopiapo.cl/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-11-07</lastmod>
   </url>
   <url>
     <loc>https://www.aireacondicionadocopiapo.cl/tierra-amarilla/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-11-07</lastmod>
   </url>
   <url>
     <loc>https://www.aireacondicionadocopiapo.cl/caldera/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-11-07</lastmod>
   </url>
   <url>
     <loc>https://www.aireacondicionadocopiapo.cl/bahia-inglesa/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-11-07</lastmod>
   </url>
   <!-- CLONING_HOOK_SITEMAP: añadir futuras URLs solo cuando exista cobertura y contenido local real. -->
 </urlset>

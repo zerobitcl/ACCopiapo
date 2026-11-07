@@ -15,6 +15,11 @@
   box-sizing: border-box;
 }
 
+/* El display:flex de .call-cta no debe anular el atributo hidden */
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -595,8 +600,37 @@ small {
 }
 
 .service-card p,
+.service-card li,
 .authority p {
   color: var(--muted-color);
+}
+
+.service-card ul {
+  margin: 14px 0 0;
+  padding-left: 18px;
+}
+
+.service-card li + li {
+  margin-top: 8px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.hero-actions .call-cta {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.call-cta--phone {
+  color: #fff;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
 }
 
 .authority {
@@ -682,15 +716,14 @@ small {
   font-weight: 700;
 }
 
-/* Scroll-reveal: solo transform/opacity para no penalizar el rendimiento */
-[data-reveal] {
+/* Oculto solo con JS activo. Sin script el contenido queda visible para el rastreo. */
+.js [data-reveal] {
   opacity: 0;
   transform: translateY(22px);
   transition: opacity 0.6s ease, transform 0.6s ease;
-  will-change: opacity, transform;
 }
 
-[data-reveal].is-visible {
+.js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
@@ -911,25 +944,29 @@ small {
     animation: none;
   }
 
-  [data-reveal] {
+  .js [data-reveal] {
     opacity: 1;
     transform: none;
     transition: none;
   }
 }
 
+@media (max-width: 900px) {
+  .main-nav a.nav-optional,
+  .brand__tag {
+    display: none;
+  }
+}
+
 @media (max-width: 560px) {
   .main-nav {
     gap: 8px;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
   }
 
-  .main-nav a:not(:last-child) {
-    display: none;
-  }
-
-  .brand__tag {
-    display: none;
+  .brand__name {
+    max-width: 108px;
+    font-size: 0.92rem;
   }
 }
 
@@ -949,15 +986,9 @@ small {
   }
 }
 
-@media (min-width: 561px) and (max-width: 900px) {
-  .brand__tag,
-  .main-nav a:nth-last-child(2) {
-    display: none;
-  }
-}
-
 @media (min-width: 680px) {
-  .call-cta {
+  .call-cta,
+  .hero-actions .call-cta {
     width: fit-content;
   }
 
@@ -987,7 +1018,7 @@ small {
   }
 
   .service-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .coverage-grid {
