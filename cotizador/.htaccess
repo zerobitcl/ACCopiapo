@@ -1,0 +1,20 @@
+Options -Indexes
+
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow, noarchive"
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "no-referrer"
+</IfModule>
+
+<Files "config.php">
+  Require all denied
+</Files>
+<Files "config.sample.php">
+  Require all denied
+</Files>
+<Files "lib.php">
+  Require all denied
+</Files>
+
+RewriteEngine On
+RewriteRule ^data/ - [F,L]

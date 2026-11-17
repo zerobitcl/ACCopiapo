@@ -2,3 +2,6 @@
 Thumbs.db
 .cursor/
 mail.config.php
+cotizador/config.php
+cotizador/data/*.json
+cotizador/data/*.lock

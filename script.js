@@ -166,10 +166,106 @@ const initScrollEffects = () => {
   revealTargets.forEach((el) => revealObserver.observe(el));
 };
 
+/* CRO: anillo operativo + WhatsApp prearmado sin depender de librerías */
+const EXTENDED_COMMUNAS = {
+  Vallenar: 1,
+  Chañaral: 1,
+  "Diego de Almagro": 1,
+  Taltal: 1,
+  "Otra localidad": 1
+};
+
+const formValue = (form, name) => {
+  const field = form.elements.namedItem(name);
+  if (!field || typeof field.value !== "string") return "";
+  return field.value.trim();
+};
+
+const buildLeadWhatsAppMessage = (form) => {
+  const comuna = formValue(form, "Comuna") || "No indicada";
+  const tipo = formValue(form, "Tipo_Cliente") || "No indicado";
+  const servicio = formValue(form, "Servicio") || "No indicado";
+  const nombre = formValue(form, "Nombre");
+  const telefono = formValue(form, "Teléfono");
+  const mensaje = formValue(form, "Mensaje");
+  const extended = Boolean(EXTENDED_COMMUNAS[comuna]);
+  const anillo = extended ? "[Ruta Extendida]" : "[Anillo Local]";
+  const lines = [
+    "Hola, quiero cotizar aire acondicionado con Aire Copiapó.",
+    anillo,
+    "Comuna: " + comuna,
+    "Tipo de cliente: " + tipo,
+    "Servicio: " + servicio
+  ];
+  if (nombre) lines.push("Nombre: " + nombre);
+  if (telefono) lines.push("Teléfono: " + telefono);
+  if (mensaje) lines.push("Detalle: " + mensaje);
+  return lines.join("\n");
+};
+
+const syncLeadRing = (form) => {
+  const select = form.querySelector("#lead-comuna");
+  const note = form.querySelector("#lead-ring-note");
+  const anilloInput = form.querySelector("#lead-anillo");
+  if (!select) return "Anillo Local";
+
+  const option = select.options[select.selectedIndex];
+  const ringAttr = option && option.getAttribute("data-ring");
+  const extended = ringAttr === "extended" || Boolean(EXTENDED_COMMUNAS[select.value]);
+  const label = extended ? "Ruta Extendida" : "Anillo Local";
+
+  if (anilloInput) anilloInput.value = label;
+  if (note) note.hidden = !extended;
+  return label;
+};
+
+const initLeadFormCoverage = () => {
+  const form = document.getElementById("lead-form");
+  if (!form) return;
+
+  const waBtn = document.getElementById("lead-whatsapp");
+  const comuna = form.querySelector("#lead-comuna");
+
+  const refresh = () => syncLeadRing(form);
+  if (comuna) {
+    comuna.addEventListener("change", refresh);
+    refresh();
+  }
+
+  if (!waBtn) return;
+
+  waBtn.addEventListener("click", () => {
+    if (!form.reportValidity()) return;
+
+    syncLeadRing(form);
+    const message = buildLeadWhatsAppMessage(form);
+    const phone = BUSINESS.phone ? BUSINESS.phone.replace(/\D/g, "") : "";
+
+    trackEvent("click_whatsapp_lead", {
+      page_location: window.location.href,
+      comuna: formValue(form, "Comuna"),
+      anillo: formValue(form, "Anillo")
+    });
+
+    if (phone) {
+      window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(message), "_blank", "noopener");
+      return;
+    }
+
+    /* Fallback CRO: sin número WA configurado, conserva el lead por correo */
+    const extra = form.querySelector("#lead-mensaje");
+    if (extra && !extra.value.trim()) {
+      extra.value = message;
+    }
+    form.requestSubmit();
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   setText("[data-year]", new Date().getFullYear());
   initBusiness();
   initFormFeedback();
   initLeadTracking();
+  initLeadFormCoverage();
   initScrollEffects();
 });

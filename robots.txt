@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /enviar.php
+Disallow: /cotizador/
 Disallow: /*?error=
 
 Sitemap: https://www.aireacondicionadocopiapo.cl/sitemap.xml

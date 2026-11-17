@@ -37,6 +37,8 @@ $telefono = campo('Teléfono', 40);
 $servicio = campo('Servicio', 120);
 $comuna   = campo('Comuna', 80);
 $zona     = campo('Zona', 80);
+$tipo     = campo('Tipo_Cliente', 80);
+$anillo   = campo('Anillo', 40);
 $mensaje  = campo('Mensaje', 2000, true);
 
 if ($nombre === '' || $telefono === '' || $servicio === '') {
@@ -73,7 +75,9 @@ $body = implode("\n", [
     'Nombre: ' . $nombre,
     'Teléfono: ' . $telefono,
     'Servicio: ' . $servicio,
-    'Comuna / zona: ' . $ubicacion,
+    'Tipo de cliente: ' . ($tipo !== '' ? $tipo : 'No indicado'),
+    'Comuna / ciudad: ' . $ubicacion,
+    'Anillo operativo: ' . ($anillo !== '' ? $anillo : 'No indicado'),
     'Detalle: ' . ($mensaje !== '' ? $mensaje : 'Sin mensaje adicional'),
     '',
     'Puedes llamar o escribir por WhatsApp al número indicado.',
