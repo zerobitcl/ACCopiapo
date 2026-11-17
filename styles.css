@@ -849,6 +849,238 @@ small {
   color: #c5d2dd;
 }
 
+.btn--ghost {
+  color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 35%, transparent);
+}
+
+/* Calculadora BTU + guías: bloques editoriales sin CLS */
+.calc-layout,
+.guide-layout {
+  display: grid;
+  gap: 28px;
+}
+
+.calc-form {
+  display: grid;
+  gap: 14px;
+  padding: 24px;
+  border: 1px solid var(--line-color);
+  border-radius: var(--radius);
+  background: var(--surface-color);
+  box-shadow: 0 14px 40px rgba(8, 24, 39, 0.08);
+}
+
+.calc-form label,
+.guide-prose label {
+  display: grid;
+  gap: 6px;
+  font-weight: 800;
+}
+
+.calc-form input,
+.calc-form select {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-color);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--text-color);
+}
+
+.calc-checks {
+  margin: 4px 0 0;
+  padding: 14px;
+  border: 1px dashed var(--line-color);
+  border-radius: 16px;
+}
+
+.calc-checks legend {
+  padding: 0 6px;
+  font-weight: 900;
+}
+
+.calc-check {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.calc-check + .calc-check {
+  margin-top: 10px;
+}
+
+.calc-check input {
+  width: 18px;
+  min-height: 18px;
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+
+.calc-result {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  padding: 24px;
+  border: 1px solid var(--line-color);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(10, 102, 255, 0.08), transparent 42%),
+    var(--surface-color);
+  box-shadow: 0 14px 40px rgba(8, 24, 39, 0.08);
+}
+
+.calc-result__title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.calc-result__panel {
+  display: block;
+  min-height: 280px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(7, 25, 40, 0.03);
+}
+
+.calc-result__kicker {
+  margin: 0 0 6px;
+  color: var(--muted-color);
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.calc-result__btu {
+  margin: 0;
+  line-height: 1.1;
+}
+
+.calc-result__btu strong {
+  font-size: clamp(2.2rem, 7vw, 3.2rem);
+  letter-spacing: -0.04em;
+  color: var(--primary-color);
+}
+
+.calc-result__btu span,
+.calc-result__hint,
+.calc-result__note {
+  color: var(--muted-color);
+}
+
+.calc-result__equipo {
+  margin: 12px 0 0;
+  font-size: 1.05rem;
+}
+
+.calc-result__breakdown {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.calc-result__breakdown li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line-color);
+  font-size: 0.92rem;
+}
+
+.calc-result__breakdown strong {
+  white-space: nowrap;
+  color: var(--primary-color);
+}
+
+.calc-result__cta {
+  display: grid;
+  gap: 10px;
+}
+
+.calc-result__cta .call-cta,
+.calc-result__cta .btn {
+  width: 100%;
+  margin: 0;
+}
+
+.calc-result__cta .call-cta--phone {
+  color: var(--text-color);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-color);
+}
+
+.guide-cards {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.guide-card {
+  padding: 22px;
+  border: 1px solid var(--line-color);
+  border-radius: var(--radius);
+  background: var(--surface-color);
+  box-shadow: 0 14px 40px rgba(8, 24, 39, 0.06);
+}
+
+.guide-card p {
+  margin-bottom: 0;
+  color: var(--muted-color);
+}
+
+.guide-prose {
+  display: grid;
+  gap: 14px;
+  max-width: 72ch;
+}
+
+.guide-prose h2 {
+  margin-top: 18px;
+}
+
+.guide-prose ul,
+.guide-prose ol {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted-color);
+}
+
+.guide-prose li + li {
+  margin-top: 8px;
+}
+
+.guide-aside {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.guide-aside .local-panel,
+.guide-toc {
+  padding: 22px;
+  border: 1px solid var(--line-color);
+  border-radius: var(--radius);
+  background: var(--surface-color);
+}
+
+.guide-toc ol {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: var(--muted-color);
+}
+
+.guide-toc a {
+  color: var(--primary-color);
+  font-weight: 800;
+}
+
 .whatsapp-float {
   position: fixed;
   right: 16px;
@@ -997,7 +1229,8 @@ small {
   .service-grid,
   .authority-grid,
   .coverage-grid,
-  .faq-list {
+  .faq-list,
+  .guide-cards {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -1035,9 +1268,15 @@ small {
     align-items: start;
   }
 
-  .local-layout {
+  .local-layout,
+  .calc-layout,
+  .guide-layout {
     grid-template-columns: 1.2fr 0.8fr;
     align-items: start;
+  }
+
+  .guide-cards {
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .section {
