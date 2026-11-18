@@ -640,6 +640,27 @@ small {
   border-bottom: 1px solid var(--line-color);
 }
 
+.authority__intro {
+  display: grid;
+  gap: 20px;
+  align-items: center;
+}
+
+.authority__logo {
+  width: min(160px, 42vw);
+  height: auto;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 14px 36px rgba(8, 24, 39, 0.1);
+}
+
+@media (min-width: 720px) {
+  .authority__intro {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 28px;
+  }
+}
+
 .authority-grid article {
   background:
     linear-gradient(180deg, rgba(10, 102, 255, 0.06), transparent 48%),

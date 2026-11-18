@@ -11,7 +11,7 @@ if (!sa_is_authed()) {
 
 $cfg = sa_config();
 $company = $cfg['company'] ?? [];
-$name = (string) ($company['name'] ?? 'Refrigeración San Agustín');
+$name = (string) ($company['name'] ?? 'Servicio Técnico San Agustín');
 $phone = (string) ($company['phone'] ?? '+56 9 2365 0596');
 $whatsapp = (string) ($company['whatsapp'] ?? '56923650596');
 $csrf = sa_csrf_token();
@@ -38,14 +38,17 @@ $csrf = sa_csrf_token();
 <body class="app-body">
   <header class="app-header">
     <div class="app-header__brand">
-      <svg class="brand-mark brand-mark--sm" viewBox="0 0 64 64" width="36" height="36" aria-hidden="true">
-        <circle cx="32" cy="32" r="30" fill="#0b3d91"/>
-        <path d="M32 10v8M32 46v8M10 32h8M46 32h8M16 16l6 6M42 42l6 6M48 16l-6 6M22 42l-6 6" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="32" cy="32" r="7" fill="#1e88e5"/>
-      </svg>
+      <img
+        class="brand-logo brand-logo--header"
+        src="../img/logo-san-agustin.jpg"
+        width="56"
+        height="56"
+        alt=""
+        decoding="async"
+      >
       <div>
         <p class="app-header__name"><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></p>
-        <p class="app-header__sub">Cotizador interno</p>
+        <p class="app-header__sub">Cotizador · Técnico oficial Aire Copiapó</p>
       </div>
     </div>
     <button class="btn-text" type="button" id="btn-logout">Salir</button>

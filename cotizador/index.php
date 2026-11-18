@@ -11,8 +11,8 @@ if (sa_is_authed()) {
 
 $cfg = sa_config();
 $company = $cfg['company'] ?? [];
-$name = (string) ($company['name'] ?? 'Refrigeración San Agustín');
-$tagline = (string) ($company['tagline'] ?? 'Tu equipo en buenas manos');
+$name = (string) ($company['name'] ?? 'Servicio Técnico San Agustín');
+$tagline = (string) ($company['tagline'] ?? 'Climatización y refrigeración');
 ?>
 <!doctype html>
 <html lang="es-CL">
@@ -26,15 +26,18 @@ $tagline = (string) ($company['tagline'] ?? 'Tu equipo en buenas manos');
 </head>
 <body class="login-body">
   <main class="login-card" aria-labelledby="login-title">
-    <div class="brand-lockup" aria-hidden="true">
-      <svg class="brand-mark" viewBox="0 0 64 64" width="56" height="56">
-        <circle cx="32" cy="32" r="30" fill="#0b3d91"/>
-        <path d="M32 10v8M32 46v8M10 32h8M46 32h8M16 16l6 6M42 42l6 6M48 16l-6 6M22 42l-6 6" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="32" cy="32" r="7" fill="#1e88e5"/>
-      </svg>
+    <div class="brand-lockup">
+      <img
+        class="brand-logo brand-logo--login"
+        src="../img/logo-san-agustin.jpg"
+        width="220"
+        height="220"
+        alt="<?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?>"
+        decoding="async"
+      >
     </div>
-    <p class="eyebrow">Servicio técnico</p>
-    <h1 id="login-title"><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></h1>
+    <p class="eyebrow">Técnico oficial · Aire Copiapó</p>
+    <h1 id="login-title" class="visually-hidden"><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></h1>
     <p class="login-lead"><?= htmlspecialchars($tagline, ENT_QUOTES, 'UTF-8') ?></p>
 
     <form id="pin-form" class="pin-form" autocomplete="off">

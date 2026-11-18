@@ -143,7 +143,31 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-size: 0.92rem;
 }
 
-.brand-lockup { margin-bottom: 12px; }
+.brand-lockup {
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+}
+
+.brand-logo {
+  display: block;
+  object-fit: contain;
+  background: #fff;
+}
+
+.brand-logo--login {
+  width: min(220px, 72vw);
+  height: auto;
+  border-radius: 16px;
+}
+
+.brand-logo--header {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
 
 .pin-form label {
   display: grid;

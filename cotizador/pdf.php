@@ -201,13 +201,19 @@ function sa_build_quote_html(array $data): string
     $cliente = is_array($data['cliente'] ?? null) ? $data['cliente'] : [];
     $items = is_array($data['items'] ?? null) ? $data['items'] : [];
 
-    $companyName = sa_h((string) ($company['name'] ?? 'Refrigeración San Agustín'));
-    $tagline = sa_h((string) ($company['tagline'] ?? 'Tu equipo en buenas manos'));
-    $footer = sa_h((string) ($company['footer'] ?? '¡Tu refrigeración, nuestra prioridad!'));
+    $companyName = sa_h((string) ($company['name'] ?? 'Servicio Técnico San Agustín'));
+    $tagline = sa_h((string) ($company['tagline'] ?? 'Climatización y refrigeración'));
+    $footer = sa_h((string) ($company['footer'] ?? 'Técnico oficial de Aire Copiapó · Climatización y refrigeración'));
     $phone = sa_h((string) ($company['phone'] ?? ''));
     $email = sa_h((string) ($company['email'] ?? ''));
     $rutCo = sa_h((string) ($company['rut'] ?? ''));
     $address = sa_h((string) ($company['address'] ?? ''));
+
+    $logoSrc = '';
+    $logoPath = dirname(__DIR__) . '/img/logo-san-agustin.jpg';
+    if (is_readable($logoPath)) {
+        $logoSrc = 'data:image/jpeg;base64,' . base64_encode((string) file_get_contents($logoPath));
+    }
 
     $rows = '';
     foreach ($items as $item) {
@@ -234,13 +240,17 @@ function sa_build_quote_html(array $data): string
         $extraContact .= '<div>' . $address . '</div>';
     }
 
+    $brandMark = $logoSrc !== ''
+        ? '<img class="logo" src="' . $logoSrc . '" width="86" height="86" alt="">'
+        : '<div class="mark-fallback"></div>';
+
     return '<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
       *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#10243f;font-size:12px}
       .wrap{padding:18px 22px}
       .head{display:flex;justify-content:space-between;gap:16px;border-bottom:3px solid #0b3d91;padding-bottom:14px;margin-bottom:16px}
       .brand{display:flex;gap:12px;align-items:center}
-      .mark{width:54px;height:54px;border-radius:50%;background:#0b3d91;display:flex;align-items:center;justify-content:center}
-      .mark svg{display:block}
+      .logo{width:86px;height:86px;object-fit:contain;border-radius:10px;background:#fff}
+      .mark-fallback{width:54px;height:54px;border-radius:50%;background:#0b3d91}
       h1{margin:0;font-size:18px;color:#0b3d91} .tag{margin:4px 0 0;color:#1e88e5;font-weight:700}
       .meta{text-align:right} .meta strong{display:block;font-size:14px;color:#0b3d91}
       .box{border:1px solid #d7e3f2;border-radius:10px;padding:12px;margin-bottom:14px;background:#f8fbff}
@@ -258,9 +268,9 @@ function sa_build_quote_html(array $data): string
     </style></head><body><div class="wrap">
       <div class="head">
         <div class="brand">
-          <div class="mark"><svg width="28" height="28" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 8v12M32 44v12M8 32h12M44 32h12M16 16l8 8M40 40l8 8M48 16l-8 8M24 40l-8 8" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/><circle cx="32" cy="32" r="6" fill="#1e88e5"/></svg></div>
+          ' . $brandMark . '
           <div>
-            <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#5b6f88">Servicio técnico</div>
+            <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#5b6f88">Técnico oficial · Aire Copiapó</div>
             <h1>' . $companyName . '</h1>
             <p class="tag">' . $tagline . '</p>
           </div>
@@ -302,7 +312,7 @@ function sa_build_quote_html(array $data): string
 
       <div class="foot">
         ' . $footer . '
-        <div class="yellow">Frío que da confianza</div>
+        <div class="yellow">Técnico oficial de Aire Copiapó</div>
       </div>
     </div></body></html>';
 }

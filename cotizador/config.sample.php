@@ -8,9 +8,9 @@ return [
     'api2pdf_key' => 'TU_API2PDF_KEY_AQUI',
     'pin_hash' => '$2y$12$xFQ8OvfS.WxewE9aTbHeSePukysLPhWkMVdQ//4Yj24IYra61x6O.',
     'company' => [
-        'name' => 'Refrigeración San Agustín',
-        'tagline' => 'Tu equipo en buenas manos',
-        'footer' => '¡Tu refrigeración, nuestra prioridad!',
+        'name' => 'Servicio Técnico San Agustín',
+        'tagline' => 'Climatización y refrigeración',
+        'footer' => 'Técnico oficial de Aire Copiapó · Climatización y refrigeración',
         'phone' => '+56 9 2365 0596',
         'whatsapp' => '56923650596',
         'rut' => '',

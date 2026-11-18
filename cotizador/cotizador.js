@@ -267,7 +267,7 @@
     const phone = (CFG.whatsapp || "").replace(/\D/g, "");
     const clientPhone = cleanPhone(quote.cliente && quote.cliente.telefono);
     const target = clientPhone || phone;
-    const msg = `Hola, te envío la cotización ${quote.number || ""} de ${CFG.companyName || "Refrigeración San Agustín"}.\n${quote.pdf_url || ""}`;
+    const msg = `Hola, te envío la cotización ${quote.number || ""} de ${CFG.companyName || "Servicio Técnico San Agustín"}.\n${quote.pdf_url || ""}`;
     els.resultWa.href = target
       ? "https://wa.me/" + target + "?text=" + encodeURIComponent(msg)
       : "#";
