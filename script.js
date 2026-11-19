@@ -2,8 +2,8 @@ window.__revealReady = true;
 
 const BUSINESS = {
   name: "Aire Copiapó",
-  /* BUSINESS_PHONE: dejar "" hasta tener un número real. Al completarlo se activan los tel: */
-  phone: "",
+  /* BUSINESS_PHONE */
+  phone: "+56 9 2365 0596",
   /* BUSINESS_EMAIL */
   email: "eduardorojas@outlook.cl"
 };
@@ -79,6 +79,32 @@ const setText = (selector, value) => {
 };
 
 const phoneHref = (phone) => "tel:" + phone.replace(/[^\d+]/g, "");
+const phoneDigits = (phone) => phone.replace(/\D/g, "");
+
+const PATH_WA_HINT = {
+  "/": "cotizar aire acondicionado en Copiapó",
+  "/tierra-amarilla/": "cotizar aire acondicionado en Tierra Amarilla",
+  "/caldera/": "cotizar aire acondicionado en Caldera",
+  "/bahia-inglesa/": "cotizar aire acondicionado en Bahía Inglesa",
+  "/calefaccion/": "cotizar calefacción en Copiapó",
+  "/ducteria/": "cotizar ductería HVAC en Copiapó",
+  "/cobre-soldadura-plata/": "cotizar cobre y soldadura plata en Copiapó",
+  "/gasfiteria-ppr/": "cotizar gasfitería y PPR en Copiapó",
+  "/mantencion-aire-acondicionado/": "agendar mantención de aire acondicionado en Copiapó",
+  "/reparacion-carga-gas/": "diagnosticar / reparar aire acondicionado en Copiapó",
+  "/calculadora-btu/": "cotizar instalación según el resultado de la calculadora de BTU",
+  "/guias/": "consultar sobre climatización en Copiapó",
+  "/guias/cuantos-btu-necesito/": "cotizar instalación tras revisar la guía de BTU",
+  "/guias/aire-acondicionado-polvo-desierto/": "agendar mantención por polvo en Copiapó",
+  "/guias/inverter-vs-on-off-atacama/": "cotizar un inverter en Copiapó",
+  "/gracias.html": "confirmar horario de atención"
+};
+
+const waHintForPath = (pathname) => {
+  if (PATH_WA_HINT[pathname]) return PATH_WA_HINT[pathname];
+  if (pathname.indexOf("/guias/") === 0) return "consultar sobre climatización en Copiapó";
+  return "cotizar con Aire Copiapó";
+};
 
 const initBusiness = () => {
   setText("[data-business-name]", BUSINESS.name);
@@ -104,11 +130,30 @@ const initBusiness = () => {
     }
   });
 
-  const digits = BUSINESS.phone.replace(/\D/g, "");
+  const digits = phoneDigits(BUSINESS.phone);
   document.querySelectorAll("[data-business-whatsapp]").forEach((node) => {
     node.hidden = false;
-    node.href = "https://wa.me/" + digits;
+    const custom = node.getAttribute("data-wa-text");
+    const msg = custom || ("Hola, quiero " + waHintForPath(window.location.pathname) + ".");
+    node.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent(msg);
   });
+};
+
+const initWhatsAppFloat = () => {
+  if (!BUSINESS.phone) return;
+  if (document.querySelector(".whatsapp-float")) return;
+  if (window.location.pathname.indexOf("/cotizador/") === 0) return;
+
+  const digits = phoneDigits(BUSINESS.phone);
+  const msg = "Hola, quiero " + waHintForPath(window.location.pathname) + ".";
+  const link = document.createElement("a");
+  link.className = "whatsapp-float";
+  link.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent(msg);
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.setAttribute("aria-label", "Escribir por WhatsApp");
+  link.innerHTML = '<span class="whatsapp-float__label" aria-hidden="true">WhatsApp</span>';
+  document.body.appendChild(link);
 };
 
 const initFormFeedback = () => {
@@ -175,26 +220,59 @@ const EXTENDED_COMMUNAS = {
   "Otra localidad": 1
 };
 
+const ZONE_TO_COMUNA = {
+  copiapo: "Copiapó",
+  "tierra-amarilla": "Tierra Amarilla",
+  caldera: "Caldera",
+  "bahia-inglesa": "Caldera",
+  vallenar: "Vallenar",
+  "diego-de-almagro": "Diego de Almagro"
+};
+
 const formValue = (form, name) => {
   const field = form.elements.namedItem(name);
   if (!field || typeof field.value !== "string") return "";
   return field.value.trim();
 };
 
+const ensureHidden = (form, name, value) => {
+  let input = form.querySelector('input[name="' + name + '"]');
+  if (!input) {
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    form.appendChild(input);
+  }
+  input.value = value;
+  return input;
+};
+
 const buildLeadWhatsAppMessage = (form) => {
-  const comuna = formValue(form, "Comuna") || "No indicada";
+  const comuna = formValue(form, "Comuna") || formValue(form, "Zona") || "No indicada";
   const servicio = formValue(form, "Servicio") || "No indicado";
   const nombre = formValue(form, "Nombre");
   const telefono = formValue(form, "Teléfono");
   const mensaje = formValue(form, "Mensaje");
+  const btu = formValue(form, "Capacidad_BTU");
+  const m2 = formValue(form, "Metros_cuadrados");
+  const tipo =
+    formValue(form, "Tipo_recinto") ||
+    formValue(form, "Tipo_proyecto") ||
+    formValue(form, "Tipo_trabajo") ||
+    formValue(form, "Necesidad") ||
+    formValue(form, "Cantidad_equipos") ||
+    formValue(form, "Sintoma");
   const extended = Boolean(EXTENDED_COMMUNAS[comuna]);
-  const anillo = extended ? "[Ruta Extendida]" : "[Anillo Local]";
+  const anillo = formValue(form, "Anillo") || (extended ? "Ruta Extendida" : "Anillo Local");
   const lines = [
     "Hola, quiero cotizar aire acondicionado con Aire Copiapó.",
-    anillo,
+    "[" + anillo + "]",
     "Comuna: " + comuna,
     "Servicio: " + servicio
   ];
+  if (tipo) lines.push("Detalle técnico: " + tipo);
+  if (btu) lines.push("Capacidad BTU: " + btu);
+  if (m2) lines.push("Metros: " + m2);
   if (nombre) lines.push("Nombre: " + nombre);
   if (telefono) lines.push("Teléfono: " + telefono);
   if (mensaje) lines.push("Detalle: " + mensaje);
@@ -217,53 +295,204 @@ const syncLeadRing = (form) => {
   return label;
 };
 
-const initLeadFormCoverage = () => {
-  const form = document.getElementById("lead-form");
-  if (!form) return;
+const openFormWhatsApp = (form) => {
+  if (!form.reportValidity()) return;
+  if (form.id === "lead-form") syncLeadRing(form);
 
-  const waBtn = document.getElementById("lead-whatsapp");
-  const comuna = form.querySelector("#lead-comuna");
+  const message = buildLeadWhatsAppMessage(form);
+  const phone = BUSINESS.phone ? phoneDigits(BUSINESS.phone) : "";
 
-  const refresh = () => syncLeadRing(form);
-  if (comuna) {
-    comuna.addEventListener("change", refresh);
-    refresh();
+  trackEvent("click_whatsapp_lead", {
+    page_location: window.location.href,
+    comuna: formValue(form, "Comuna") || formValue(form, "Zona"),
+    anillo: formValue(form, "Anillo"),
+    form_id: form.id
+  });
+
+  if (phone) {
+    window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(message), "_blank", "noopener");
+    return;
   }
 
-  if (!waBtn) return;
+  const extra = form.querySelector("#lead-mensaje") || form.querySelector('textarea[name="Mensaje"]');
+  if (extra && !extra.value.trim()) {
+    extra.value = message;
+  }
+  form.requestSubmit();
+};
 
-  waBtn.addEventListener("click", () => {
-    if (!form.reportValidity()) return;
+const ensureWhatsAppButton = (form) => {
+  let waBtn = form.querySelector("[data-wa-fallback]");
+  if (waBtn) return waBtn;
 
-    syncLeadRing(form);
-    const message = buildLeadWhatsAppMessage(form);
-    const phone = BUSINESS.phone ? BUSINESS.phone.replace(/\D/g, "") : "";
+  const actions = form.querySelector(".form-actions");
+  waBtn = document.createElement("button");
+  waBtn.type = "button";
+  waBtn.className = "btn btn--ghost";
+  waBtn.id = form.id === "lead-form" ? "lead-whatsapp" : form.id + "-whatsapp";
+  waBtn.setAttribute("data-wa-fallback", "");
+  waBtn.textContent = "WhatsApp con estos datos";
 
-    trackEvent("click_whatsapp_lead", {
-      page_location: window.location.href,
-      comuna: formValue(form, "Comuna"),
-      anillo: formValue(form, "Anillo")
-    });
+  if (actions) {
+    actions.appendChild(waBtn);
+  } else {
+    const submit = form.querySelector('button[type="submit"]');
+    if (submit && submit.parentNode) {
+      const wrap = document.createElement("div");
+      wrap.className = "form-actions";
+      submit.parentNode.insertBefore(wrap, submit);
+      wrap.appendChild(submit);
+      wrap.appendChild(waBtn);
+    } else {
+      form.appendChild(waBtn);
+    }
+  }
+  return waBtn;
+};
 
-    if (phone) {
-      window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(message), "_blank", "noopener");
-      return;
+const initLeadFormCoverage = () => {
+  const forms = [
+    document.getElementById("lead-form"),
+    document.getElementById("cotizar")
+  ].filter(Boolean);
+
+  forms.forEach((form) => {
+    ensureHidden(form, "Pagina_origen", window.location.pathname);
+
+    if (form.id === "lead-form") {
+      const comuna = form.querySelector("#lead-comuna");
+      if (comuna) {
+        comuna.addEventListener("change", () => syncLeadRing(form));
+        syncLeadRing(form);
+      }
     }
 
-    /* Fallback CRO: sin número WA configurado, conserva el lead por correo */
-    const extra = form.querySelector("#lead-mensaje");
-    if (extra && !extra.value.trim()) {
-      extra.value = message;
-    }
-    form.requestSubmit();
+    const waBtn = ensureWhatsAppButton(form);
+    waBtn.addEventListener("click", () => openFormWhatsApp(form));
   });
+};
+
+const selectOptionByValue = (select, value) => {
+  if (!select || !value) return false;
+  const wanted = value.toLowerCase();
+  for (let i = 0; i < select.options.length; i += 1) {
+    const opt = select.options[i];
+    if (opt.value.toLowerCase() === wanted || opt.text.toLowerCase() === wanted) {
+      select.selectedIndex = i;
+      return true;
+    }
+  }
+  for (let i = 0; i < select.options.length; i += 1) {
+    const opt = select.options[i];
+    if (opt.value.toLowerCase().indexOf(wanted) !== -1 || opt.text.toLowerCase().indexOf(wanted) !== -1) {
+      select.selectedIndex = i;
+      return true;
+    }
+  }
+  return false;
+};
+
+const initFormPrefill = () => {
+  const params = new URLSearchParams(window.location.search);
+  const zona = params.get("zona") || "";
+  const servicio = params.get("servicio") || "";
+  const btu = params.get("btu") || "";
+  const m2 = params.get("m2") || "";
+  if (!zona && !servicio && !btu && !m2) return;
+
+  const form = document.getElementById("lead-form") || document.getElementById("cotizar");
+  if (!form) return;
+
+  const comunaLabel = ZONE_TO_COMUNA[zona] || zona;
+  if (comunaLabel) {
+    const comunaSelect = form.querySelector("#lead-comuna") || form.elements.namedItem("Comuna");
+    if (comunaSelect && comunaSelect.tagName === "SELECT") {
+      selectOptionByValue(comunaSelect, comunaLabel);
+      syncLeadRing(form);
+    }
+  }
+
+  if (servicio) {
+    const servicioSelect = form.querySelector("#lead-servicio") || form.elements.namedItem("Servicio");
+    if (servicioSelect && servicioSelect.tagName === "SELECT") {
+      selectOptionByValue(servicioSelect, decodeURIComponent(servicio));
+    }
+  }
+
+  if (btu) ensureHidden(form, "Capacidad_BTU", btu);
+  if (m2) ensureHidden(form, "Metros_cuadrados", m2);
+
+  const mensaje = form.querySelector("#lead-mensaje") || form.querySelector('textarea[name="Mensaje"]');
+  if (mensaje && !mensaje.value.trim()) {
+    const parts = [];
+    if (btu) parts.push("Capacidad estimada: " + Number(btu).toLocaleString("es-CL") + " BTU");
+    if (m2) parts.push(m2 + " m²");
+    if (comunaLabel) parts.push("Zona: " + comunaLabel);
+    if (parts.length) mensaje.value = "Resultado calculadora BTU — " + parts.join(" · ") + ".";
+  }
+
+  if (btu || m2) {
+    let badge = form.querySelector(".form-prefill-badge");
+    if (!badge) {
+      badge = document.createElement("p");
+      badge.className = "form-prefill-badge";
+      badge.setAttribute("role", "status");
+      const title = form.querySelector(".quick-form__title");
+      if (title && title.parentNode) {
+        title.insertAdjacentElement("afterend", badge);
+      } else {
+        form.insertBefore(badge, form.firstChild);
+      }
+    }
+    const bits = [];
+    if (btu) bits.push(Number(btu).toLocaleString("es-CL") + " BTU");
+    if (m2) bits.push(m2 + " m²");
+    if (comunaLabel) bits.push(comunaLabel);
+    badge.textContent = "Capacidad pre-cargada: " + bits.join(" · ");
+  }
+
+  if (window.location.hash === "#lead-form" || window.location.hash === "#cotizar") {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.requestAnimationFrame(() => {
+      form.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+    });
+  }
+};
+
+const initThanksPage = () => {
+  if (window.location.pathname.indexOf("gracias") === -1) return;
+  const params = new URLSearchParams(window.location.search);
+  const servicio = params.get("servicio") || "";
+  const ubicacion = params.get("ubicacion") || "";
+  const summary = document.getElementById("thanks-summary");
+  if (summary && (servicio || ubicacion)) {
+    const bits = [];
+    if (servicio) bits.push(servicio);
+    if (ubicacion) bits.push(ubicacion);
+    summary.textContent = "Recibimos tu solicitud de " + bits.join(" en ") + ". Eduardo te contactará a la brevedad.";
+    summary.hidden = false;
+  }
+
+  const wa = document.getElementById("thanks-whatsapp");
+  if (wa && BUSINESS.phone) {
+    const digits = phoneDigits(BUSINESS.phone);
+    let msg = "Hola Eduardo, acabo de enviar una solicitud por la web";
+    if (servicio) msg += " de " + servicio;
+    if (ubicacion) msg += " en " + ubicacion;
+    msg += ". ¿Me puedes confirmar horario?";
+    wa.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent(msg);
+    wa.hidden = false;
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   setText("[data-year]", new Date().getFullYear());
   initBusiness();
+  initWhatsAppFloat();
   initFormFeedback();
   initLeadTracking();
   initLeadFormCoverage();
+  initFormPrefill();
+  initThanksPage();
   initScrollEffects();
 });

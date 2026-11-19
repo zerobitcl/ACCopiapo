@@ -35,7 +35,7 @@
         "description": "Cómo el polvo en suspensión de Atacama afecta filtros, serpentines y consumo del aire acondicionado, y cada cuánto conviene mantención.",
         "inLanguage": "es-CL",
         "datePublished": "2026-03-24",
-        "dateModified": "2026-03-24",
+        "dateModified": "2026-11-19",
         "author": {"@type": "Person", "name": "Eduardo Rojas"},
         "publisher": {"@id": "https://www.aireacondicionadocopiapo.cl/#hvac-business"},
         "mainEntityOfPage": "https://www.aireacondicionadocopiapo.cl/guias/aire-acondicionado-polvo-desierto/",
@@ -45,7 +45,7 @@
         "@type": "BreadcrumbList",
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.aireacondicionadocopiapo.cl/"},
-          {"@type": "ListItem", "position": 2, "name": "Guías", "item": "https://www.aireacondicionadocopiapo.cl/guias/aire-acondicionado-polvo-desierto/"},
+          {"@type": "ListItem", "position": 2, "name": "Guías", "item": "https://www.aireacondicionadocopiapo.cl/guias/"},
           {"@type": "ListItem", "position": 3, "name": "Polvo del desierto", "item": "https://www.aireacondicionadocopiapo.cl/guias/aire-acondicionado-polvo-desierto/"}
         ]
       }
@@ -82,16 +82,16 @@
     </section>
 
     <nav class="breadcrumb" aria-label="Migas de pan">
-      <a href="/">Inicio</a> / <a href="/calculadora-btu/">Calculadora BTU</a> / <span aria-current="page">Polvo del desierto</span>
+      <a href="/">Inicio</a> / <a href="/guias/">Guías</a> / <span aria-current="page">Polvo del desierto</span>
     </nav>
 
     <section class="section guide-layout" aria-labelledby="contenido-guia">
       <article class="guide-prose" id="contenido-guia">
         <p class="eyebrow">Clima local</p>
-        <h2>Por qué el polvo de Atacama castiga al equipo</h2>
+        <h2 id="por-que-afecta">Por qué el polvo de Atacama castiga al equipo</h2>
         <p>En Copiapó y Tierra Amarilla el material fino entra por ventanas, puertas y la propia aspiración del equipo. Se pega en el evaporador, la turbina y el condensador exterior. El intercambio de calor cae: el compresor trabaja más para sacar menos frío.</p>
 
-        <h2>Síntomas típicos</h2>
+        <h2 id="sintomas">Síntomas típicos</h2>
         <ul>
           <li>Sale aire, pero no enfría como el primer verano.</li>
           <li>Goteo interior: el drenaje se tapa con polvo y limo.</li>
@@ -100,10 +100,15 @@
           <li>Unidad exterior “peluda” o con aletas opacas.</li>
         </ul>
 
-        <h2>Cada cuánto hacer mantención</h2>
+        <aside class="guide-callout" aria-label="Agendar mantención">
+          <p><strong>¿Filtros limpios y poco frío?</strong> Agenda mantención preventiva antes del verano.</p>
+          <a class="btn btn--primary" href="/mantencion-aire-acondicionado/">Ir a mantención en Copiapó</a>
+        </aside>
+
+        <h2 id="frecuencia">Cada cuánto hacer mantención</h2>
         <p>En la ciudad y el valle minero recomendamos <strong>1 o 2 mantenciones preventivas al año</strong>. Quien vive cerca de caminos de ripio, faenas o con la unidad exterior al viento del desierto suele necesitar la segunda visita. En costa (Caldera, Bahía Inglesa) el enemigo principal es la salinidad, no el caliche: el protocolo de lavado cambia.</p>
 
-        <h2>Qué incluye una mantención útil</h2>
+        <h2 id="que-incluye">Qué incluye una mantención útil</h2>
         <ul>
           <li>Limpieza de filtros, evaporador, turbina y bandeja.</li>
           <li>Lavado del condensador exterior saturado.</li>
@@ -111,21 +116,21 @@
           <li>Diagnóstico si hay pérdida de frío o ruido anormal.</li>
         </ul>
 
-        <h2>BTU correcto + mantención</h2>
+        <h2 id="btu-y-mantencion">BTU correcto + mantención</h2>
         <p>Un equipo subdimensionado se satura antes. Antes de culpar solo al polvo, verifica capacidad con la <a class="text-link" href="/calculadora-btu/?zona=copiapo">calculadora de BTU</a> y la guía <a class="text-link" href="/guias/cuantos-btu-necesito/">cuántos BTU necesito</a>. Si estás eligiendo tecnología, compara <a class="text-link" href="/guias/inverter-vs-on-off-atacama/">inverter vs on/off</a>.</p>
 
-        <h2>Pedir mantención</h2>
-        <p><a class="text-link" href="/#lead-form">Cotiza mantención en Copiapó</a> o revisa cobertura en <a class="text-link" href="/tierra-amarilla/">Tierra Amarilla</a>, <a class="text-link" href="/caldera/">Caldera</a> y <a class="text-link" href="/bahia-inglesa/">Bahía Inglesa</a>.</p>
+        <h2 id="pedir-mantencion">Pedir mantención</h2>
+        <p><a class="text-link" href="/mantencion-aire-acondicionado/">Cotiza mantención en Copiapó</a>. Si el equipo no enfría pese a estar limpio, puede ser <a class="text-link" href="/reparacion-carga-gas/">reparación o carga de gas</a>. Cobertura en <a class="text-link" href="/tierra-amarilla/">Tierra Amarilla</a>, <a class="text-link" href="/caldera/">Caldera</a> y <a class="text-link" href="/bahia-inglesa/">Bahía Inglesa</a>.</p>
       </article>
 
       <aside class="guide-aside" aria-label="Recursos relacionados">
         <nav class="guide-toc" aria-labelledby="toc-title">
           <h2 id="toc-title">En esta guía</h2>
           <ol>
-            <li>Por qué afecta el polvo</li>
-            <li>Síntomas</li>
-            <li>Frecuencia de mantención</li>
-            <li>Qué incluye la visita</li>
+            <li><a href="#por-que-afecta">Por qué afecta el polvo</a></li>
+            <li><a href="#sintomas">Síntomas</a></li>
+            <li><a href="#frecuencia">Frecuencia de mantención</a></li>
+            <li><a href="#que-incluye">Qué incluye la visita</a></li>
           </ol>
         </nav>
         <div class="local-panel">
@@ -138,7 +143,7 @@
   </main>
 
   <footer class="site-footer">
-    <p class="copyright">&copy; <span data-year></span> <span data-business-name>Aire Copiapó</span> · Responsable: Eduardo Rojas · Copiapó, Atacama.</p>
+    <p class="copyright">&copy; <span data-year></span> <span data-business-name>Aire Copiapó</span> · <a data-business-phone href="tel:">+56 9 2365 0596</a> · Responsable: Eduardo Rojas · Copiapó, Atacama.</p>
   </footer>
 </body>
 </html>

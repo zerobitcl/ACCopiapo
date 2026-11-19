@@ -35,7 +35,7 @@
         "description": "Comparación práctica entre equipos inverter y convencionales on/off para el clima seco de Copiapó y la Región de Atacama.",
         "inLanguage": "es-CL",
         "datePublished": "2026-03-24",
-        "dateModified": "2026-03-24",
+        "dateModified": "2026-11-19",
         "author": {"@type": "Person", "name": "Eduardo Rojas"},
         "publisher": {"@id": "https://www.aireacondicionadocopiapo.cl/#hvac-business"},
         "mainEntityOfPage": "https://www.aireacondicionadocopiapo.cl/guias/inverter-vs-on-off-atacama/",
@@ -45,7 +45,7 @@
         "@type": "BreadcrumbList",
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.aireacondicionadocopiapo.cl/"},
-          {"@type": "ListItem", "position": 2, "name": "Guías", "item": "https://www.aireacondicionadocopiapo.cl/guias/inverter-vs-on-off-atacama/"},
+          {"@type": "ListItem", "position": 2, "name": "Guías", "item": "https://www.aireacondicionadocopiapo.cl/guias/"},
           {"@type": "ListItem", "position": 3, "name": "Inverter vs on/off", "item": "https://www.aireacondicionadocopiapo.cl/guias/inverter-vs-on-off-atacama/"}
         ]
       }
@@ -82,19 +82,19 @@
     </section>
 
     <nav class="breadcrumb" aria-label="Migas de pan">
-      <a href="/">Inicio</a> / <a href="/calculadora-btu/">Calculadora BTU</a> / <span aria-current="page">Inverter vs on/off</span>
+      <a href="/">Inicio</a> / <a href="/guias/">Guías</a> / <span aria-current="page">Inverter vs on/off</span>
     </nav>
 
     <section class="section guide-layout" aria-labelledby="contenido-guia">
       <article class="guide-prose" id="contenido-guia">
         <p class="eyebrow">Tecnología</p>
-        <h2>Qué hace un on/off</h2>
+        <h2 id="que-es-on-off">Qué hace un on/off</h2>
         <p>El equipo convencional enciende el compresor a plena potencia y lo apaga cuando alcanza la temperatura. En Copiapó, con pechos de calor fuertes, eso se traduce en arranques frecuentes, picos de consumo y más variación de temperatura en la pieza.</p>
 
-        <h2>Qué hace un inverter</h2>
+        <h2 id="que-es-inverter">Qué hace un inverter</h2>
         <p>El inverter modula la velocidad del compresor. En lugar de apagar y encender a tope, baja revoluciones para mantener el confort. En jornadas largas de verano suele gastar menos y suena más estable.</p>
 
-        <h2>Comparación práctica para Atacama</h2>
+        <h2 id="comparacion-atacama">Comparación práctica para Atacama</h2>
         <ul>
           <li><strong>Uso diario varias horas:</strong> inverter suele recuperar la diferencia de precio con menor consumo y mejor confort.</li>
           <li><strong>Uso ocasional o presupuesto muy justo:</strong> un on/off bien dimensionado puede bastar si la mantención se cumple.</li>
@@ -102,7 +102,12 @@
           <li><strong>BTU incorrectos:</strong> un inverter chico también se queda corto. Primero calcula capacidad con la <a class="text-link" href="/calculadora-btu/">calculadora de BTU</a>.</li>
         </ul>
 
-        <h2>Cuándo recomendar inverter en Copiapó</h2>
+        <aside class="guide-callout" aria-label="Calcular BTU">
+          <p><strong>Primero la capacidad:</strong> la tecnología no corrige un equipo subdimensionado.</p>
+          <a class="btn btn--primary" href="/calculadora-btu/">Calcular BTU</a>
+        </aside>
+
+        <h2 id="cuando-inverter">Cuándo recomendar inverter en Copiapó</h2>
         <ul>
           <li>Dormitorios o living con uso diario en verano.</li>
           <li>Oficinas y locales con jornada extendida.</li>
@@ -110,7 +115,7 @@
           <li>Clientes que priorizan cuenta de luz y ruido estable.</li>
         </ul>
 
-        <h2>Antes de comprar</h2>
+        <h2 id="antes-de-comprar">Antes de comprar</h2>
         <ol>
           <li>Define m² y factores locales: guía <a class="text-link" href="/guias/cuantos-btu-necesito/">cuántos BTU necesito</a>.</li>
           <li>Corre la <a class="text-link" href="/calculadora-btu/">calculadora</a> con tu zona.</li>
@@ -123,10 +128,10 @@
         <nav class="guide-toc" aria-labelledby="toc-title">
           <h2 id="toc-title">En esta guía</h2>
           <ol>
-            <li>On/off</li>
-            <li>Inverter</li>
-            <li>Comparación Atacama</li>
-            <li>Cuándo elegir inverter</li>
+            <li><a href="#que-es-on-off">On/off</a></li>
+            <li><a href="#que-es-inverter">Inverter</a></li>
+            <li><a href="#comparacion-atacama">Comparación Atacama</a></li>
+            <li><a href="#cuando-inverter">Cuándo elegir inverter</a></li>
           </ol>
         </nav>
         <div class="local-panel">
@@ -139,7 +144,7 @@
   </main>
 
   <footer class="site-footer">
-    <p class="copyright">&copy; <span data-year></span> <span data-business-name>Aire Copiapó</span> · Responsable: Eduardo Rojas · Copiapó, Atacama.</p>
+    <p class="copyright">&copy; <span data-year></span> <span data-business-name>Aire Copiapó</span> · <a data-business-phone href="tel:">+56 9 2365 0596</a> · Responsable: Eduardo Rojas · Copiapó, Atacama.</p>
   </footer>
 </body>
 </html>

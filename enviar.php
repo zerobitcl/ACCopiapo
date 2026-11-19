@@ -43,6 +43,61 @@ function lead_log(array $row): void
     @file_put_contents($dir . '/leads.jsonl', $line . "\n", FILE_APPEND | LOCK_EX);
 }
 
+/**
+ * Solo rutas internas relativas para no abrir open-redirect.
+ */
+function safe_origin_path(string $raw): string
+{
+    $raw = trim($raw);
+    if ($raw === '' || $raw[0] !== '/' || strpos($raw, '//') === 0) {
+        return '/';
+    }
+    if (preg_match('#^[a-zA-Z][a-zA-Z0-9+.-]*:#', $raw)) {
+        return '/';
+    }
+    $path = parse_url($raw, PHP_URL_PATH);
+    if (!is_string($path) || $path === '' || $path[0] !== '/') {
+        return '/';
+    }
+    if (strpos($path, '..') !== false) {
+        return '/';
+    }
+    $allowed = [
+        '/',
+        '/tierra-amarilla/',
+        '/caldera/',
+        '/bahia-inglesa/',
+        '/calefaccion/',
+        '/ducteria/',
+        '/cobre-soldadura-plata/',
+        '/gasfiteria-ppr/',
+        '/mantencion-aire-acondicionado/',
+        '/reparacion-carga-gas/',
+        '/calculadora-btu/',
+        '/guias/',
+        '/guias/cuantos-btu-necesito/',
+        '/guias/aire-acondicionado-polvo-desierto/',
+        '/guias/inverter-vs-on-off-atacama/',
+    ];
+    if (!in_array($path, $allowed, true)) {
+        return '/';
+    }
+    return $path;
+}
+
+function form_anchor(string $path): string
+{
+    return $path === '/' ? '#lead-form' : '#cotizar';
+}
+
+function redirect_error(string $code, string $originPath): void
+{
+    $anchor = form_anchor($originPath);
+    $target = $originPath . '?error=' . rawurlencode($code) . $anchor;
+    header('Location: ' . $target, true, 303);
+    exit;
+}
+
 $nombre = campo('Nombre', 120);
 if ($nombre === '') {
     $nombre = campo('name', 120);
@@ -53,16 +108,30 @@ $comuna   = campo('Comuna', 80);
 $zona     = campo('Zona', 80);
 $anillo   = campo('Anillo', 40);
 $mensaje  = campo('Mensaje', 2000, true);
+$tipoRecinto = campo('Tipo_recinto', 120);
+$tipoProyecto = campo('Tipo_proyecto', 120);
+$tipoTrabajo = campo('Tipo_trabajo', 120);
+$necesidad = campo('Necesidad', 120);
+$cantidadEquipos = campo('Cantidad_equipos', 80);
+$sintoma = campo('Sintoma', 160);
+$capacidadBtu = campo('Capacidad_BTU', 40);
+$metros = campo('Metros_cuadrados', 40);
+$paginaOrigen = safe_origin_path(campo('Pagina_origen', 200));
+
+$detalleTecnico = $tipoRecinto !== '' ? $tipoRecinto
+    : ($tipoProyecto !== '' ? $tipoProyecto
+    : ($tipoTrabajo !== '' ? $tipoTrabajo
+    : ($necesidad !== '' ? $necesidad
+    : ($cantidadEquipos !== '' ? $cantidadEquipos
+    : ($sintoma !== '' ? $sintoma : '')))));
 
 if ($nombre === '' || $telefono === '' || $servicio === '') {
-    header('Location: /?error=campos#lead-form', true, 303);
-    exit;
+    redirect_error('campos', $paginaOrigen);
 }
 
 $configPath = __DIR__ . '/mail.config.php';
 if (!is_file($configPath)) {
-    header('Location: /?error=config#lead-form', true, 303);
-    exit;
+    redirect_error('config', $paginaOrigen);
 }
 
 /** @var array{host?:string,port?:int,user?:string,pass?:string,from?:string} $cfg */
@@ -75,7 +144,7 @@ $outlookCopy = 'eduardorojas@outlook.cl';
 
 $subject = 'Cotización web: ' . $nombre . ' — ' . $ubicacion;
 
-$body = implode("\n", [
+$bodyLines = [
     'Hola Eduardo,',
     '',
     'Llegó una solicitud de cotización desde aireacondicionadocopiapo.cl.',
@@ -85,13 +154,27 @@ $body = implode("\n", [
     'Servicio: ' . $servicio,
     'Comuna / ciudad: ' . $ubicacion,
     'Anillo operativo: ' . ($anillo !== '' ? $anillo : 'No indicado'),
-    'Detalle: ' . ($mensaje !== '' ? $mensaje : 'Sin mensaje adicional'),
-    '',
-    'Puedes llamar o escribir por WhatsApp al número indicado.',
-    '',
-    '— Formulario Aire Copiapó',
-    'https://www.aireacondicionadocopiapo.cl/',
-]);
+];
+
+if ($detalleTecnico !== '') {
+    $bodyLines[] = 'Detalle técnico: ' . $detalleTecnico;
+}
+if ($capacidadBtu !== '') {
+    $bodyLines[] = 'Capacidad BTU: ' . $capacidadBtu;
+}
+if ($metros !== '') {
+    $bodyLines[] = 'Metros cuadrados: ' . $metros;
+}
+
+$bodyLines[] = 'Página origen: ' . $paginaOrigen;
+$bodyLines[] = 'Detalle: ' . ($mensaje !== '' ? $mensaje : 'Sin mensaje adicional');
+$bodyLines[] = '';
+$bodyLines[] = 'Puedes llamar o escribir por WhatsApp al número indicado.';
+$bodyLines[] = '';
+$bodyLines[] = '— Formulario Aire Copiapó';
+$bodyLines[] = 'https://www.aireacondicionadocopiapo.cl' . $paginaOrigen;
+
+$body = implode("\n", $bodyLines);
 
 $lead = [
     'ts' => gmdate('c'),
@@ -101,6 +184,10 @@ $lead = [
     'servicio' => $servicio,
     'comuna' => $ubicacion,
     'anillo' => $anillo,
+    'detalle_tecnico' => $detalleTecnico,
+    'capacidad_btu' => $capacidadBtu,
+    'metros' => $metros,
+    'pagina_origen' => $paginaOrigen,
     'mensaje' => $mensaje,
 ];
 lead_log($lead);
@@ -125,9 +212,13 @@ lead_log([
 ]);
 
 if (!$okPrimary) {
-    header('Location: /?error=envio#lead-form', true, 303);
-    exit;
+    redirect_error('envio', $paginaOrigen);
 }
 
-header('Location: /gracias.html', true, 303);
+$thanksQs = http_build_query([
+    'servicio' => $servicio,
+    'ubicacion' => $ubicacion,
+], '', '&', PHP_QUERY_RFC3986);
+
+header('Location: /gracias.html?' . $thanksQs, true, 303);
 exit;

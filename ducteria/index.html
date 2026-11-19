@@ -43,6 +43,7 @@
           "@type": "HVACBusiness",
           "@id": "https://www.aireacondicionadocopiapo.cl/#hvac-business",
           "name": "Aire Copiapó",
+          "telephone": "+56923650596",
           "email": "eduardorojas@outlook.cl"
         },
         "areaServed": [
@@ -153,6 +154,7 @@
         <input type="hidden" name="_subject" value="Solicitud ductería Copiapó">
         <input type="hidden" name="Zona" value="Copiapó">
         <input type="hidden" name="Servicio" value="Ductería">
+        <input type="hidden" name="Pagina_origen" value="/ducteria/">
         <input class="form-trap" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
         <label><span>Nombre</span><input type="text" name="Nombre" autocomplete="name" required></label>
         <label><span>Teléfono</span><input type="tel" name="Teléfono" inputmode="tel" autocomplete="tel" required></label>
@@ -166,8 +168,10 @@
           </select>
         </label>
         <label><span>Mensaje <small>(opcional)</small></span><textarea name="Mensaje" rows="3" placeholder="Sector, recinto y qué falla (ruido, salas calientes, pérdida)"></textarea></label>
-        <button class="btn btn--primary" type="submit">Enviar solicitud</button>
-        <small>Tus datos solo se usarán para responder esta consulta.</small>
+        <div class="form-actions">
+          <button class="btn btn--primary" type="submit">Enviar solicitud</button>
+        </div>
+        <small>Respuesta rápida por llamada o WhatsApp. Tus datos solo se usarán para responder esta consulta.</small>
       </form>
     </section>
 
@@ -207,7 +211,7 @@
   </main>
 
   <footer class="site-footer">
-    <p class="copyright">&copy; <span data-year></span> <span data-business-name>Aire Copiapó</span> · Técnico oficial: Servicio Técnico San Agustín · Copiapó, Atacama.</p>
+    <p class="copyright">&copy; <span data-year></span> <span data-business-name>Aire Copiapó</span> · <a data-business-phone href="tel:">+56 9 2365 0596</a> · Técnico oficial: Servicio Técnico San Agustín · Copiapó, Atacama.</p>
   </footer>
 </body>
 </html>

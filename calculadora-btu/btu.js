@@ -107,13 +107,39 @@
     link.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent(msg);
   };
 
-  const render = () => {
+  const updateCotizar = (commercial, m2, zone) => {
+    const cotizar = document.querySelector("[data-calc-cotizar]");
+    if (!cotizar) return;
+    const qs = new URLSearchParams({
+      servicio: "Montaje aire acondicionado",
+      zona: zone,
+      btu: String(commercial),
+      m2: String(m2 || "")
+    });
+    cotizar.href = "/?" + qs.toString() + "#lead-form";
+    cotizar.dataset.btu = String(commercial);
+  };
+
+  const trackCalc = (commercial, zone) => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "calculate_btu",
+      btu_recommended: commercial,
+      zone: zone,
+      page_location: window.location.href
+    });
+  };
+
+  let lastTracked = "";
+
+  const render = (fromSubmit) => {
     const state = readState();
     if (!state.m2) {
       output.innerHTML = `
         <p class="calc-result__hint">Ingresa los metros cuadrados del espacio para ver la capacidad recomendada.</p>
         <p class="calc-result__note">Referencia orientativa para Atacama. Un técnico confirma en visita.</p>`;
       updateWhatsApp(12000, ZONE_LABEL[state.zone]);
+      updateCotizar(12000, "", state.zone);
       return;
     }
 
@@ -134,11 +160,12 @@
       <p class="calc-result__note">Es una guía para Copiapó y Atacama. Orientación, aislamiento y uso real se confirman en la visita técnica.</p>`;
 
     updateWhatsApp(commercial, zoneLabel);
+    updateCotizar(commercial, state.m2, state.zone);
 
-    const cotizar = document.querySelector("[data-calc-cotizar]");
-    if (cotizar) {
-      cotizar.href = "/#lead-form";
-      cotizar.dataset.btu = String(commercial);
+    const key = commercial + "|" + state.zone + "|" + state.m2;
+    if (fromSubmit || key !== lastTracked) {
+      lastTracked = key;
+      if (fromSubmit) trackCalc(commercial, state.zone);
     }
   };
 
@@ -148,13 +175,13 @@
     form.zona.value = zona;
   };
 
-  form.addEventListener("input", render);
-  form.addEventListener("change", render);
+  form.addEventListener("input", () => render(false));
+  form.addEventListener("change", () => render(false));
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    render();
+    render(true);
   });
 
   applyZoneFromQuery();
-  render();
+  render(false);
 })();

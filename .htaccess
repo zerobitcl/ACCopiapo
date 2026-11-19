@@ -6,6 +6,9 @@
   Require all denied
 </Files>
 
+# Rescate de URLs rotas hacia embudo de cotización
+ErrorDocument 404 /404.html
+
 # Canonico: https://www.aireacondicionadocopiapo.cl/ (evita duplicar HTTP / apex / index.html)
 <IfModule mod_rewrite.c>
   RewriteEngine On
