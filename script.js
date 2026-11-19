@@ -183,7 +183,6 @@ const formValue = (form, name) => {
 
 const buildLeadWhatsAppMessage = (form) => {
   const comuna = formValue(form, "Comuna") || "No indicada";
-  const tipo = formValue(form, "Tipo_Cliente") || "No indicado";
   const servicio = formValue(form, "Servicio") || "No indicado";
   const nombre = formValue(form, "Nombre");
   const telefono = formValue(form, "Teléfono");
@@ -194,7 +193,6 @@ const buildLeadWhatsAppMessage = (form) => {
     "Hola, quiero cotizar aire acondicionado con Aire Copiapó.",
     anillo,
     "Comuna: " + comuna,
-    "Tipo de cliente: " + tipo,
     "Servicio: " + servicio
   ];
   if (nombre) lines.push("Nombre: " + nombre);
