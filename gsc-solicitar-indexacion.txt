@@ -1,0 +1,15 @@
+GSC — Solicitar indexación (hacer en este orden, 1 URL a la vez)
+Propiedad: aireacondicionadocopiapo.cl
+Ruta: Search Console → Inspección de URLs → pegar URL → Solicitar indexación
+
+1. https://www.aireacondicionadocopiapo.cl/
+2. https://www.aireacondicionadocopiapo.cl/mantencion-aire-acondicionado/
+3. https://www.aireacondicionadocopiapo.cl/reparacion-carga-gas/
+4. https://www.aireacondicionadocopiapo.cl/calculadora-btu/
+5. https://www.aireacondicionadocopiapo.cl/tierra-amarilla/
+6. https://www.aireacondicionadocopiapo.cl/caldera/
+
+Después: Indexación → Sitemaps → reenviar
+https://www.aireacondicionadocopiapo.cl/sitemap.xml
+
+No borrar canónicas ni redirecciones (www): son consolidación correcta.

@@ -1,0 +1,18 @@
+GSC — Revisar entre el 28 Nov y el 30 Nov 2026 (5–7 días tras el deploy)
+
+Comparar: mismo día de semana (vie–dom vs vie–dom anterior)
+Filtro: Tipo de búsqueda = Web
+
+Objetivos
+1. Indexación → Páginas: Indexadas ≥ 8–10 (hoy ~2)
+2. Consulta pilar "aire acondicionado copiapo": CTR ≥ 10–12%
+3. Clics 7 días ≥ nivel pre-viernes (~25+)
+4. Home sigue concentrando, pero mantención / reparación / BTU ya no en 0–1 impresión
+
+Pestañas a abrir
+- Rendimiento → Comparar últimos 7 vs 7 anteriores
+- Rendimiento → Consultas (ordenar por Impresiones diferencia)
+- Rendimiento → Páginas
+- Indexación → Páginas (conteo Indexadas / Descubierta sin indexar)
+
+No cambiar Title ni H1 de la Home en este intervalo.
