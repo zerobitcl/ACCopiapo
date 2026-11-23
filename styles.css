@@ -307,10 +307,10 @@ h1 {
 }
 
 .hero h1 {
-  max-width: 720px;
-  font-size: clamp(3rem, 6vw, 5rem);
-  line-height: 0.98;
-  letter-spacing: -0.065em;
+  max-width: 16em;
+  font-size: clamp(1.85rem, 4.4vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
 }
 
 .hero-sub {
@@ -347,11 +347,11 @@ h1 {
 }
 
 h2 {
-  max-width: 860px;
+  max-width: 18em;
   margin-bottom: 18px;
-  font-size: clamp(2rem, 8vw, 3.6rem);
-  line-height: 1;
-  letter-spacing: -0.06em;
+  font-size: clamp(1.65rem, 3.6vw, 2.45rem);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
 }
 
 h3 {
@@ -460,6 +460,23 @@ h3 {
 .hero-proof span {
   color: rgba(255, 255, 255, 0.62);
   font-size: 0.76rem;
+}
+
+.hero-scope {
+  max-width: 48ch;
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.call-cta--wa {
+  color: #fff;
+  background: #1fae58;
+}
+
+.call-cta--wa:hover {
+  background: #18964c;
 }
 
 .quick-form,
@@ -612,6 +629,87 @@ small {
 
 .service-card li + li {
   margin-top: 8px;
+}
+
+.solution-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.solution-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.solution-card p {
+  margin: 0;
+}
+
+.solution-card__use {
+  color: var(--primary-color);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.solution-card__badge {
+  align-self: flex-start;
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--dark-color);
+  background: var(--secondary-color);
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.solution-card--hot {
+  border-color: color-mix(in srgb, var(--secondary-color) 70%, var(--line-color));
+  box-shadow: 0 18px 44px rgba(255, 178, 26, 0.18);
+}
+
+.solution-card .btn {
+  margin-top: auto;
+}
+
+.brand-note {
+  max-width: 760px;
+  margin: 18px 0 0;
+  color: var(--muted-color);
+}
+
+.section-cta {
+  margin: 22px 0 0;
+}
+
+.section-cta .btn {
+  width: 100%;
+}
+
+.sector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: 10px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.sector-grid li {
+  padding: 12px 14px;
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+  background: var(--surface-color);
+  font-weight: 850;
+}
+
+.sector-grid small {
+  display: block;
+  margin: 2px 0 0;
+  color: var(--muted-color);
+  font-size: 0.78rem;
+  font-weight: 650;
+  text-align: left;
 }
 
 .hero-actions {
@@ -1347,13 +1445,38 @@ small {
   translate: -50% 0;
 }
 
+@media (min-width: 800px) {
+  .solution-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .section-cta .btn {
+    width: auto;
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 720px) {
+  .whatsapp-float {
+    right: 12px;
+    bottom: 12px;
+    min-height: 48px;
+    padding: 0 14px;
+    box-shadow: 0 8px 18px rgba(31, 174, 88, 0.28);
+  }
+
+  .whatsapp-float::before {
+    animation: none;
+  }
+}
+
 @media (max-width: 400px) {
   .whatsapp-float__label {
-    display: none;
+    font-size: 0.82rem;
   }
 
   .whatsapp-float {
-    padding: 0 16px;
+    padding: 0 14px;
   }
 }
 

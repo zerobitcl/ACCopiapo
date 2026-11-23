@@ -1,11 +1,28 @@
 window.__revealReady = true;
 
+/* CLONING CONFIG — ciudad, cobertura y WhatsApp. El HTML visible debe repetir estos mismos datos. */
 const BUSINESS = {
   name: "Aire Copiapó",
+  city: "Copiapó",
+  region: "Atacama",
+  country: "CL",
+  domain: "https://www.aireacondicionadocopiapo.cl/",
   /* BUSINESS_PHONE */
   phone: "+56 9 2365 0596",
   /* BUSINESS_EMAIL */
-  email: "eduardorojas@outlook.cl"
+  email: "eduardorojas@outlook.cl",
+  years: 13,
+  sectors: [
+    "Centro de Copiapó",
+    "El Palomar",
+    "Paipote",
+    "Llanos de Ollantay",
+    "Rosario",
+    "Juan Pablo II",
+    "Pedro León Gallo",
+    "San Fernando"
+  ],
+  scheduledCities: ["Tierra Amarilla", "Caldera"]
 };
 
 /* GTM async desde script.js (defer): no entra al critical path del HTML. */
@@ -29,6 +46,28 @@ const trackEvent = (name, params = {}) => {
   }
 };
 
+const trackWhatsAppLead = (serviceType, params = {}) => {
+  const service = serviceType || "consulta-general";
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: "whatsapp_lead",
+    service_type: service,
+    page_location: window.location.href,
+    link_url: params.link_url || "",
+    sector: params.sector || "",
+    recinto: params.recinto || ""
+  });
+  if (typeof gtag === "function") {
+    gtag("event", "generate_lead", {
+      event_category: "whatsapp",
+      service_type: service,
+      page_location: window.location.href,
+      sector: params.sector || "",
+      recinto: params.recinto || ""
+    });
+  }
+};
+
 const initLeadTracking = () => {
   document.addEventListener("click", (event) => {
     const link = event.target.closest("a[href]");
@@ -46,12 +85,18 @@ const initLeadTracking = () => {
     }
     if (host === "wa.me" || host === "api.whatsapp.com") {
       trackEvent("click_whatsapp", { link_url: link.href, page_location: window.location.href });
+      trackWhatsAppLead(link.getAttribute("data-service-type"), {
+        link_url: link.href,
+        sector: link.getAttribute("data-sector") || "",
+        recinto: link.getAttribute("data-recinto") || ""
+      });
     }
   });
 
   document.addEventListener("submit", (event) => {
     const form = event.target;
     if (!(form instanceof HTMLFormElement)) return;
+    if (form.hasAttribute("data-wa-form")) return;
     if (form.id !== "lead-form" && form.id !== "cotizar") return;
 
     event.preventDefault();
@@ -106,6 +151,14 @@ const waHintForPath = (pathname) => {
   return "cotizar con Aire Copiapó";
 };
 
+const defaultWaText = (pathname) => {
+  const city = BUSINESS.city || "Copiapó";
+  if (pathname === "/" || pathname === "/index.html") {
+    return "Hola, necesito cotizar aire acondicionado en " + city + ". Sector: ";
+  }
+  return "Hola, quiero " + waHintForPath(pathname) + ".";
+};
+
 const initBusiness = () => {
   setText("[data-business-name]", BUSINESS.name);
 
@@ -134,7 +187,7 @@ const initBusiness = () => {
   document.querySelectorAll("[data-business-whatsapp]").forEach((node) => {
     node.hidden = false;
     const custom = node.getAttribute("data-wa-text");
-    const msg = custom || ("Hola, quiero " + waHintForPath(window.location.pathname) + ".");
+    const msg = custom || defaultWaText(window.location.pathname);
     node.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent(msg);
   });
 };
@@ -145,12 +198,13 @@ const initWhatsAppFloat = () => {
   if (window.location.pathname.indexOf("/cotizador/") === 0) return;
 
   const digits = phoneDigits(BUSINESS.phone);
-  const msg = "Hola, quiero " + waHintForPath(window.location.pathname) + ".";
+  const msg = defaultWaText(window.location.pathname);
   const link = document.createElement("a");
   link.className = "whatsapp-float";
   link.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent(msg);
   link.target = "_blank";
   link.rel = "noopener";
+  link.setAttribute("data-service-type", "consulta-general");
   link.setAttribute("aria-label", "Escribir por WhatsApp");
   link.innerHTML = '<span class="whatsapp-float__label" aria-hidden="true">WhatsApp</span>';
   document.body.appendChild(link);
@@ -247,7 +301,19 @@ const ensureHidden = (form, name, value) => {
   return input;
 };
 
+const buildQuickWaMessage = (form) => {
+  const city = BUSINESS.city || "Copiapó";
+  const servicio = formValue(form, "Servicio") || "venta e instalación";
+  const sector = formValue(form, "Sector") || "";
+  const tipo = formValue(form, "Tipo");
+  let message = "Hola, necesito cotizar " + servicio + " de aire acondicionado en " + city + ". Sector: " + sector;
+  if (tipo) message += ". Tipo: " + tipo;
+  if (form.dataset.prefillNote) message += ". " + form.dataset.prefillNote;
+  return message + ".";
+};
+
 const buildLeadWhatsAppMessage = (form) => {
+  if (form.querySelector('[name="Sector"]')) return buildQuickWaMessage(form);
   const comuna = formValue(form, "Comuna") || formValue(form, "Zona") || "No indicada";
   const servicio = formValue(form, "Servicio") || "No indicado";
   const nombre = formValue(form, "Nombre");
@@ -280,14 +346,14 @@ const buildLeadWhatsAppMessage = (form) => {
 };
 
 const syncLeadRing = (form) => {
-  const select = form.querySelector("#lead-comuna");
+  const select = form.querySelector("#lead-sector") || form.querySelector("#lead-comuna");
   const note = form.querySelector("#lead-ring-note");
   const anilloInput = form.querySelector("#lead-anillo");
   if (!select) return "Anillo Local";
 
   const option = select.options[select.selectedIndex];
   const ringAttr = option && option.getAttribute("data-ring");
-  const extended = ringAttr === "extended" || Boolean(EXTENDED_COMMUNAS[select.value]);
+  const extended = ringAttr === "extended" || ringAttr === "scheduled" || Boolean(EXTENDED_COMMUNAS[select.value]);
   const label = extended ? "Ruta Extendida" : "Anillo Local";
 
   if (anilloInput) anilloInput.value = label;
@@ -301,12 +367,20 @@ const openFormWhatsApp = (form) => {
 
   const message = buildLeadWhatsAppMessage(form);
   const phone = BUSINESS.phone ? phoneDigits(BUSINESS.phone) : "";
+  const serviceSelect = form.querySelector('[name="Servicio"]');
+  const selected = serviceSelect && serviceSelect.selectedOptions ? serviceSelect.selectedOptions[0] : null;
+  const serviceType = (selected && selected.getAttribute("data-service-type")) || "consulta-general";
 
   trackEvent("click_whatsapp_lead", {
     page_location: window.location.href,
-    comuna: formValue(form, "Comuna") || formValue(form, "Zona"),
+    comuna: formValue(form, "Comuna") || formValue(form, "Sector") || formValue(form, "Zona"),
     anillo: formValue(form, "Anillo"),
-    form_id: form.id
+    form_id: form.id,
+    service_type: serviceType
+  });
+  trackWhatsAppLead(serviceType, {
+    sector: formValue(form, "Sector") || formValue(form, "Comuna") || formValue(form, "Zona"),
+    recinto: formValue(form, "Tipo")
   });
 
   if (phone) {
@@ -359,6 +433,19 @@ const initLeadFormCoverage = () => {
   forms.forEach((form) => {
     ensureHidden(form, "Pagina_origen", window.location.pathname);
 
+    if (form.hasAttribute("data-wa-form")) {
+      const sector = form.querySelector("#lead-sector");
+      if (sector) {
+        sector.addEventListener("change", () => syncLeadRing(form));
+        syncLeadRing(form);
+      }
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        openFormWhatsApp(form);
+      });
+      return;
+    }
+
     if (form.id === "lead-form") {
       const comuna = form.querySelector("#lead-comuna");
       if (comuna) {
@@ -405,8 +492,12 @@ const initFormPrefill = () => {
 
   const comunaLabel = ZONE_TO_COMUNA[zona] || zona;
   if (comunaLabel) {
+    const sectorSelect = form.querySelector("#lead-sector");
     const comunaSelect = form.querySelector("#lead-comuna") || form.elements.namedItem("Comuna");
-    if (comunaSelect && comunaSelect.tagName === "SELECT") {
+    if (sectorSelect) {
+      selectOptionByValue(sectorSelect, comunaLabel);
+      syncLeadRing(form);
+    } else if (comunaSelect && comunaSelect.tagName === "SELECT") {
       selectOptionByValue(comunaSelect, comunaLabel);
       syncLeadRing(form);
     }
@@ -423,12 +514,14 @@ const initFormPrefill = () => {
   if (m2) ensureHidden(form, "Metros_cuadrados", m2);
 
   const mensaje = form.querySelector("#lead-mensaje") || form.querySelector('textarea[name="Mensaje"]');
-  if (mensaje && !mensaje.value.trim()) {
-    const parts = [];
-    if (btu) parts.push("Capacidad estimada: " + Number(btu).toLocaleString("es-CL") + " BTU");
-    if (m2) parts.push(m2 + " m²");
-    if (comunaLabel) parts.push("Zona: " + comunaLabel);
-    if (parts.length) mensaje.value = "Resultado calculadora BTU — " + parts.join(" · ") + ".";
+  const parts = [];
+  if (btu) parts.push("Capacidad estimada: " + Number(btu).toLocaleString("es-CL") + " BTU");
+  if (m2) parts.push(m2 + " m²");
+  if (comunaLabel) parts.push("Zona: " + comunaLabel);
+  if (parts.length) {
+    const note = "Resultado calculadora BTU — " + parts.join(" · ");
+    form.dataset.prefillNote = note;
+    if (mensaje && !mensaje.value.trim()) mensaje.value = note + ".";
   }
 
   if (btu || m2) {
