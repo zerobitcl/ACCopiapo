@@ -115,8 +115,8 @@
               </div>
             </div>
             <label>
-              <span>Descripción</span>
-              <textarea data-field="descripcion" rows="2" placeholder="Ej: Mantención refrigerador comercial + gas">${escapeHtml(item.descripcion)}</textarea>
+              <span>Descripción <small>(texto largo y viñetas OK)</small></span>
+              <textarea class="item-desc" data-field="descripcion" rows="6" placeholder="Ej: Servicio integral de reemplazo (3 unidades):&#10;Incluye:&#10;• Desmontaje e izaje&#10;• Renovación eléctrica&#10;• Puesta en marcha">${escapeHtml(item.descripcion)}</textarea>
             </label>
             <div class="grid-2">
               <label>
@@ -132,7 +132,15 @@
           </article>`;
       })
       .join("");
+    autosizeDescs();
     renderTotals();
+  };
+
+  const autosizeDescs = () => {
+    els.items.querySelectorAll("textarea.item-desc").forEach((node) => {
+      node.style.height = "auto";
+      node.style.height = Math.max(120, node.scrollHeight) + "px";
+    });
   };
 
   const escapeHtml = (value) =>
@@ -410,7 +418,13 @@
     if (!card) return;
     const item = items.find((row) => row.id === card.getAttribute("data-id"));
     if (!item) return;
-    if (field === "descripcion") item.descripcion = event.target.value;
+    if (field === "descripcion") {
+      item.descripcion = event.target.value;
+      if (event.target.classList.contains("item-desc")) {
+        event.target.style.height = "auto";
+        event.target.style.height = Math.max(120, event.target.scrollHeight) + "px";
+      }
+    }
     if (field === "cantidad") item.cantidad = Number(event.target.value) || 0;
     if (field === "precio") item.precio = parseMoney(event.target.value);
     const sub = card.querySelector(".item-subtotal");

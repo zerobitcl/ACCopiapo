@@ -110,10 +110,11 @@ $payload = [
     'html' => $html,
     'fileName' => $number . '.pdf',
     'options' => [
-        'marginTop' => 0.5,
-        'marginBottom' => 0.5,
-        'marginLeft' => 0.5,
-        'marginRight' => 0.5,
+        // Márgenes compactos: evita empujar el pie a una 2.ª página casi vacía
+        'marginTop' => 0.35,
+        'marginBottom' => 0.35,
+        'marginLeft' => 0.4,
+        'marginRight' => 0.4,
         'printBackground' => true,
         'paperFormat' => 'A4',
     ],
@@ -218,7 +219,7 @@ function sa_build_quote_html(array $data): string
     $rows = '';
     foreach ($items as $item) {
         $rows .= '<tr>'
-            . '<td>' . sa_h((string) ($item['descripcion'] ?? '')) . '</td>'
+            . '<td class="desc">' . sa_format_item_desc((string) ($item['descripcion'] ?? '')) . '</td>'
             . '<td class="num">' . sa_h((string) ($item['cantidad'] ?? '')) . '</td>'
             . '<td class="num">' . sa_h(sa_clp((int) ($item['precio'] ?? 0))) . '</td>'
             . '<td class="num">' . sa_h(sa_clp((int) ($item['subtotal'] ?? 0))) . '</td>'
@@ -241,36 +242,43 @@ function sa_build_quote_html(array $data): string
     }
 
     $brandMark = $logoSrc !== ''
-        ? '<img class="logo" src="' . $logoSrc . '" width="86" height="86" alt="">'
+        ? '<img class="logo" src="' . $logoSrc . '" width="72" height="72" alt="">'
         : '<div class="mark-fallback"></div>';
 
     return '<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
-      *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#10243f;font-size:12px}
-      .wrap{padding:18px 22px}
-      .head{display:flex;justify-content:space-between;gap:16px;border-bottom:3px solid #0b3d91;padding-bottom:14px;margin-bottom:16px}
-      .brand{display:flex;gap:12px;align-items:center}
-      .logo{width:86px;height:86px;object-fit:contain;border-radius:10px;background:#fff}
-      .mark-fallback{width:54px;height:54px;border-radius:50%;background:#0b3d91}
-      h1{margin:0;font-size:18px;color:#0b3d91} .tag{margin:4px 0 0;color:#1e88e5;font-weight:700}
-      .meta{text-align:right} .meta strong{display:block;font-size:14px;color:#0b3d91}
-      .box{border:1px solid #d7e3f2;border-radius:10px;padding:12px;margin-bottom:14px;background:#f8fbff}
-      .box h2{margin:0 0 8px;font-size:13px;color:#0b3d91}
-      table{width:100%;border-collapse:collapse;margin:8px 0 14px}
-      th,td{padding:8px;border-bottom:1px solid #d7e3f2;vertical-align:top}
-      th{background:#0b3d91;color:#fff;text-align:left;font-size:11px}
-      .num{text-align:right;white-space:nowrap}
-      .totals{width:260px;margin-left:auto}
-      .totals td{border:0;padding:5px 0}
-      .totals .grand td{font-size:14px;font-weight:900;color:#0b3d91;border-top:2px solid #0b3d91;padding-top:8px}
-      .conds{font-size:11px;color:#5b6f88;line-height:1.45}
-      .foot{margin-top:22px;padding:12px;border-radius:10px;background:#0b3d91;color:#fff;text-align:center;font-weight:700}
-      .yellow{display:inline-block;margin-top:6px;padding:4px 10px;border-radius:999px;background:#ffd23f;color:#10243f;font-size:11px}
+      *{box-sizing:border-box}
+      html,body{margin:0;padding:0;height:auto!important;min-height:0!important}
+      body{font-family:Arial,Helvetica,sans-serif;color:#10243f;font-size:11.5px;line-height:1.35}
+      .wrap{padding:10px 14px 8px}
+      .head{display:flex;justify-content:space-between;gap:12px;border-bottom:3px solid #0b3d91;padding-bottom:10px;margin-bottom:10px}
+      .brand{display:flex;gap:10px;align-items:center}
+      .logo{width:72px;height:72px;object-fit:contain;border-radius:8px;background:#fff}
+      .mark-fallback{width:48px;height:48px;border-radius:50%;background:#0b3d91}
+      h1{margin:0;font-size:16px;color:#0b3d91} .tag{margin:2px 0 0;color:#1e88e5;font-weight:700;font-size:11px}
+      .meta{text-align:right;font-size:11px} .meta strong{display:block;font-size:13px;color:#0b3d91}
+      .box{border:1px solid #d7e3f2;border-radius:8px;padding:10px;margin-bottom:10px;background:#f8fbff}
+      .box h2{margin:0 0 6px;font-size:12px;color:#0b3d91}
+      table{width:100%;border-collapse:collapse;margin:4px 0 10px}
+      thead{display:table-header-group}
+      tr{page-break-inside:auto;break-inside:auto}
+      th,td{padding:7px 8px;border-bottom:1px solid #d7e3f2;vertical-align:top}
+      th{background:#0b3d91;color:#fff;text-align:left;font-size:10.5px}
+      .desc{word-wrap:break-word;overflow-wrap:anywhere;line-height:1.4;font-size:10.5px}
+      .desc .bullet{display:block;padding-left:12px;text-indent:-12px;margin:1px 0 1px 4px}
+      .num{text-align:right;white-space:nowrap;width:1%;font-size:11px}
+      .totals{width:240px;margin-left:auto;margin-bottom:8px}
+      .totals td{border:0;padding:4px 0}
+      .totals .grand td{font-size:13px;font-weight:900;color:#0b3d91;border-top:2px solid #0b3d91;padding-top:6px}
+      .conds{font-size:10.5px;color:#5b6f88;line-height:1.4;page-break-inside:avoid;break-inside:avoid}
+      .closing{page-break-inside:avoid;break-inside:avoid}
+      .foot{margin-top:10px;padding:10px;border-radius:8px;background:#0b3d91;color:#fff;text-align:center;font-weight:700;font-size:11px}
+      .yellow{display:inline-block;margin-top:5px;padding:3px 9px;border-radius:999px;background:#ffd23f;color:#10243f;font-size:10px}
     </style></head><body><div class="wrap">
       <div class="head">
         <div class="brand">
           ' . $brandMark . '
           <div>
-            <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#5b6f88">Técnico oficial · Aire Copiapó</div>
+            <div style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#5b6f88">Técnico oficial · Aire Copiapó</div>
             <h1>' . $companyName . '</h1>
             <p class="tag">' . $tagline . '</p>
           </div>
@@ -296,23 +304,56 @@ function sa_build_quote_html(array $data): string
         <tbody>' . $rows . '</tbody>
       </table>
 
-      <table class="totals">
-        <tr><td>Neto</td><td class="num">' . sa_h(sa_clp((int) $data['neto'])) . '</td></tr>
-        ' . $ivaRow . '
-        <tr class="grand"><td>Total</td><td class="num">' . sa_h(sa_clp((int) $data['total'])) . '</td></tr>
-      </table>
+      <div class="closing">
+        <table class="totals">
+          <tr><td>Neto</td><td class="num">' . sa_h(sa_clp((int) $data['neto'])) . '</td></tr>
+          ' . $ivaRow . '
+          <tr class="grand"><td>Total</td><td class="num">' . sa_h(sa_clp((int) $data['total'])) . '</td></tr>
+        </table>
 
-      <div class="box conds">
-        <h2>Condiciones</h2>
-        <div>Validez: ' . sa_h((string) $data['validez_dias']) . ' días</div>
-        <div>Garantía: ' . sa_h((string) $data['garantia']) . '</div>
-        <div>Forma de pago: ' . sa_h((string) $data['forma_pago']) . '</div>
-        <div style="margin-top:8px">' . nl2br(sa_h((string) $data['condiciones'])) . '</div>
-      </div>
+        <div class="box conds">
+          <h2>Condiciones</h2>
+          <div>Validez: ' . sa_h((string) $data['validez_dias']) . ' días</div>
+          <div>Garantía: ' . sa_h((string) $data['garantia']) . '</div>
+          <div>Forma de pago: ' . sa_h((string) $data['forma_pago']) . '</div>
+          <div style="margin-top:6px">' . nl2br(sa_h((string) $data['condiciones'])) . '</div>
+        </div>
 
-      <div class="foot">
-        ' . $footer . '
-        <div class="yellow">Técnico oficial de Aire Copiapó</div>
+        <div class="foot">
+          ' . $footer . '
+          <div class="yellow">Técnico oficial de Aire Copiapó</div>
+        </div>
       </div>
     </div></body></html>';
+}
+
+/**
+ * Preserva saltos de línea y viñetas en la descripción del ítem del PDF.
+ */
+function sa_format_item_desc(string $raw): string
+{
+    $text = str_replace(["\r\n", "\r"], "\n", trim($raw));
+    if ($text === '') {
+        return '';
+    }
+
+    $lines = explode("\n", $text);
+    $out = [];
+    foreach ($lines as $line) {
+        $trimmed = rtrim($line);
+        if ($trimmed === '') {
+            $out[] = '<br>';
+            continue;
+        }
+        $escaped = sa_h($trimmed);
+        // Viñetas • - * o guion al inicio → indentación legible
+        if (preg_match('/^([•\-\*]|\d+[\.\)])\s+/u', $trimmed)) {
+            $out[] = '<span class="bullet">' . $escaped . '</span>';
+        } else {
+            $out[] = $escaped . '<br>';
+        }
+    }
+
+    $html = implode('', $out);
+    return preg_replace('/(?:<br>)+$/', '', $html) ?? $html;
 }

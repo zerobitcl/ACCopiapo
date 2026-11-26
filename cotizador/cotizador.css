@@ -309,6 +309,13 @@ textarea {
 
 textarea { min-height: 96px; resize: vertical; }
 
+textarea.item-desc {
+  min-height: 120px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  field-sizing: content;
+}
+
 input:focus,
 textarea:focus {
   outline: 3px solid rgba(30, 136, 229, 0.2);
