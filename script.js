@@ -8,7 +8,7 @@ const BUSINESS = {
   country: "CL",
   domain: "https://www.aireacondicionadocopiapo.cl/",
   /* BUSINESS_PHONE */
-  phone: "+56 9 2365 0596",
+  phone: "+56 9 9428 4048",
   /* BUSINESS_EMAIL */
   email: "eduardorojas@outlook.cl",
   years: 13,

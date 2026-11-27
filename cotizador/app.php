@@ -12,8 +12,8 @@ if (!sa_is_authed()) {
 $cfg = sa_config();
 $company = $cfg['company'] ?? [];
 $name = (string) ($company['name'] ?? 'Servicio Técnico San Agustín');
-$phone = (string) ($company['phone'] ?? '+56 9 2365 0596');
-$whatsapp = (string) ($company['whatsapp'] ?? '56923650596');
+$phone = (string) ($company['phone'] ?? '+56 9 9428 4048');
+$whatsapp = (string) ($company['whatsapp'] ?? '56994284048');
 $csrf = sa_csrf_token();
 ?>
 <!doctype html>
